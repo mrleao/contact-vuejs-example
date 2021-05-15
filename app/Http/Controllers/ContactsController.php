@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderShipped;
 
 class ContactsController extends Controller
 {
@@ -102,6 +104,8 @@ class ContactsController extends Controller
             'archive' => $nameFile,
            ]
         );
+
+        Mail::to('contato@esocial.com')->send(new OrderShipped);
 
         return Redirect::route('list.contacts');
     }
