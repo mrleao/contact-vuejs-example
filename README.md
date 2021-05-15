@@ -17,4 +17,5 @@ PARA CRIAR AS TABELAS DO BANCO DE DADOS
 7) executar o php artisan migrate 
 
 SERVIDOR DE E-MAIL LOCAL http://localhost:8025/
-verifique localhost/ e localhost:8080 para acessar ou algum outro endereço local da sua máquina
+
+Verifique localhost/ e localhost:8080 para acessar o sistema ou algum outro endereço local da sua máquina
