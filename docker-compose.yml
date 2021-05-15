@@ -1,0 +1,76 @@
+version: "3.7"
+services:
+
+  ## PHP-FPM Container ############
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+    image: php-fpm
+    container_name: esocial
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - esocial-network
+
+  ## NGINX Container #############
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: esocial-nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - esocial-network
+
+  # postgres
+  postgres:
+    image: postgres:13.2
+    container_name: esocial-postgres
+    volumes:
+      - esocial-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_DATABASE}
+    networks:
+      - esocial-network
+
+  # Redis
+  redis:
+    image: redis:6.2
+    container_name: esocial-redis
+    command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+    volumes:
+      - esocial-redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - esocial-network
+
+  # Mailhog
+  mailhog: 
+    image: mailhog/mailhog:v1.0.1
+    container_name: esocial-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - esocial-network 
+
+networks:
+  esocial-network:
+    driver: bridge
+
+volumes:
+  esocial-db:
+    driver: local
+  esocial-redis:
+    driver: local
