@@ -91,7 +91,7 @@ class ContactsController extends Controller
             'email'=> 'required|email|max:255',
             'phone'=> 'celular_com_ddd',
             'message'=> 'required|max:500',
-            'archive'=> 'mimes:txt, doc, docx, pdf, odt'
+            'archive'=> 'mimes:doc,docx,pdf,odt'
         ]);
         
         Contact::create(
